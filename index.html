@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Puppy | Entrega no horário certo, sem largar o balcão</title>
+<meta name="description" content="Lista de espera do Puppy, o marketplace B2B que compara fornecedores e organiza as entregas por urgência.">
+<meta name="theme-color" content="#03A9F4">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Puppy | Entrega no horário certo, sem largar o balcão">
+<meta property="og:description" content="Compare fornecedores, feche o pedido e receba na hora certa. Entre na lista de espera.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23172033'/%3E%3Ctext x='14' y='46' font-family='Arial' font-weight='700' font-size='42' fill='white'%3Ep%3C/text%3E%3Ccircle cx='47' cy='43' r='5' fill='%2303A9F4'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ---------- Tokens (mesmos do protótipo) ---------- */
+:root{
+  --primary:#03A9F4;
+  --primary-ink:#0277bd;      /* azul mais escuro, para texto e links sobre fundo claro */
+  --secondary:#FF9800;
+  --ink:#172033;
+  --text:#3a4458;
+  --muted:#5b6475;
+  --bg:#f3f4f6;
+  --surface:#ffffff;
+  --line:#e5e7eb;
+  --line-strong:#cfd5de;
+  --danger:#b3261e;
+  --green:#16834a;--greenbg:#eaf7ef;
+  --blue:#2563eb;--bluebg:#edf4ff;
+  --yellow:#996900;--yellowbg:#fff6dc;
+  --p-muted:#697386;          /* cinza usado dentro do celular (igual ao protótipo) */
+  --maxw:1120px;
+}
+
+/* ---------- Base ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:Sora,Inter,sans-serif;margin:0;line-height:1.12;letter-spacing:-.02em;color:var(--ink)}
+p{margin:0}
+a{color:var(--primary-ink)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--primary-ink);outline-offset:3px;border-radius:6px}
+.wrap{width:min(var(--maxw),100% - 48px);margin-inline:auto}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+
+/* ---------- Botões ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:0;border-radius:10px;font-weight:700;font-size:1rem;line-height:1;cursor:pointer;text-decoration:none;transition:background .15s ease}
+.btn--primary{background:var(--primary);color:var(--ink)}
+.btn--primary:hover{background:#29b6f6}
+.btn--orange{background:var(--secondary);color:var(--ink)}
+.btn--orange:hover{background:#ffa726}
+.btn--ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink);min-height:40px;padding:0 16px;font-size:.92rem}
+.btn--ghost:hover{background:var(--ink);color:#fff}
+.btn--block{width:100%}
+.btn[disabled]{opacity:.7;cursor:progress}
+
+/* ---------- Topo ---------- */
+.top{padding:22px 0}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:Sora,sans-serif;font-weight:700;font-size:1.65rem;letter-spacing:-.06em;color:var(--ink);text-decoration:none;line-height:1}
+.logo span{color:var(--primary)}
+
+/* ---------- Hero ---------- */
+.hero{padding:24px 0 96px}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:80px;align-items:center}
+.hero__title{font-size:clamp(2.25rem,4.7vw,3.7rem);font-weight:700;letter-spacing:-.035em;max-width:12.5em}
+.hero__lead{margin-top:20px;max-width:33em;color:var(--text);font-size:1.15rem}
+
+/* ---------- Formulário ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px}
+.form{margin-top:32px;max-width:540px;box-shadow:0 14px 44px rgba(23,32,51,.09)}
+.form__head h2{font-size:1.35rem;letter-spacing:-.02em}
+.form__head p{margin-top:4px;color:var(--muted);font-size:.95rem}
+.field{margin:18px 0 0;padding:0;border:0;min-width:0}
+.field>label,.field>legend{display:block;padding:0;font-weight:600;font-size:.92rem;margin-bottom:7px;color:var(--ink)}
+.field .opt{font-weight:400;color:var(--muted)}
+.input{width:100%;height:48px;padding:0 14px;background:#fff;border:1px solid var(--line-strong);border-radius:10px;font-size:1rem;transition:border-color .15s ease,box-shadow .15s ease}
+.input::placeholder{color:#8a93a3}
+.input:hover{border-color:#aab3c2}
+.input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(3,169,244,.22)}
+.field.is-invalid .input{border-color:var(--danger)}
+.error{min-height:0;margin-top:6px;color:var(--danger);font-size:.88rem;font-weight:500}
+.error:empty{display:none}
+
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{position:relative;display:block;cursor:pointer}
+.choice input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.choice__box{display:block;padding:12px 14px;border:1.5px solid var(--line-strong);border-radius:12px;background:#fff;transition:border-color .15s ease,background .15s ease}
+.choice__box strong{display:block;font-family:Sora,sans-serif;font-size:1rem;letter-spacing:-.01em}
+.choice__box small{display:block;margin-top:2px;color:var(--muted);font-size:.85rem;line-height:1.35}
+.choice:hover .choice__box{border-color:#aab3c2}
+.choice input:checked + .choice__box{border-color:var(--primary);background:var(--bluebg);box-shadow:inset 0 0 0 1px var(--primary)}
+.choice input:focus-visible + .choice__box{outline:3px solid var(--primary-ink);outline-offset:2px}
+.field.is-invalid .choice__box{border-color:var(--danger)}
+
+.more{margin-top:18px;border-top:1px solid var(--line);padding-top:6px}
+.more summary{list-style:none;cursor:pointer;padding:10px 0;font-weight:600;font-size:.95rem;color:var(--primary-ink);display:flex;align-items:center;gap:8px;border-radius:6px}
+.more summary::-webkit-details-marker{display:none}
+.more summary::before{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s ease;margin-left:2px}
+.more[open] summary::before{transform:rotate(45deg)}
+.more__grid{display:grid;gap:0}
+
+.consent{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:.9rem;color:var(--text);line-height:1.5}
+.consent input{flex:none;width:20px;height:20px;margin:2px 0 0;accent-color:var(--primary-ink);cursor:pointer}
+.consent label{cursor:pointer}
+.consent.is-invalid label{color:var(--danger)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .btn{margin-top:22px}
+.form__status{margin-top:14px;font-size:.92rem;font-weight:500;color:var(--danger)}
+.form__status:empty{display:none}
+.form__fine{margin-top:12px;color:var(--muted);font-size:.85rem;text-align:center}
+
+.success{margin-top:32px;max-width:540px;box-shadow:0 14px 44px rgba(23,32,51,.09);border-color:#bfe3c9;background:#fff}
+.success:focus{outline:none}
+.success__mark{width:46px;height:46px;border-radius:50%;background:var(--greenbg);color:var(--green);display:grid;place-items:center;margin-bottom:14px}
+.success h2{font-size:1.5rem}
+.success p{margin-top:8px;color:var(--text)}
+.success .btn{margin-top:20px}
+
+/* ---------- Celular (demo do app) ---------- */
+.demo{display:flex;flex-direction:column;align-items:center;gap:16px}
+.tabs{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
+.tabs button{border:0;background:none;padding:10px 18px;border-radius:8px;font-size:.88rem;font-weight:700;color:var(--muted);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--primary);color:var(--ink)}
+.demo__note{font-size:.82rem;color:var(--muted)}
+
+.phone-scale{--s:.86;width:calc(390px * var(--s));height:calc(780px * var(--s))}
+.phone{width:390px;height:780px;background:#111722;border-radius:43px;padding:9px;box-shadow:0 28px 70px rgba(17,24,39,.24);position:relative;transform:scale(var(--s));transform-origin:0 0;font-family:Inter,Arial,sans-serif;line-height:1.35;color:var(--ink)}
+.phone::before{content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);width:112px;height:25px;border-radius:18px;background:#111722;z-index:20}
+.phone *{box-sizing:border-box}
+.p-screen{height:100%;border-radius:35px;overflow:hidden;background:#f7f8fa;position:relative}
+.p-status{height:31px;background:#fff;display:flex;justify-content:space-between;align-items:flex-end;padding:0 17px 5px;font-size:9px;font-weight:700}
+.p-bar{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 17px}
+.p-logo{font-family:Sora,sans-serif;font-size:21px;font-weight:700;letter-spacing:-1px}
+.p-logo span{color:var(--primary)}
+.p-avatar{background:#f1f3f5;width:34px;height:34px;border-radius:50%;font-weight:800;color:#4b5563;font-size:13px;display:grid;place-items:center}
+.p-content{height:calc(100% - 93px);overflow:hidden;padding:16px 15px 25px}
+.p-content.has-nav{height:calc(100% - 93px - 66px)}
+.p-view{animation:pfade .25s ease}
+@keyframes pfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.p-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--primary);font-weight:800;margin-bottom:6px}
+.p-title{font-family:Sora,sans-serif;font-size:23px;font-weight:700;letter-spacing:-.7px;margin:0 0 5px;line-height:1.15}
+.p-h2{font-family:Sora,sans-serif;font-size:16px;font-weight:700}
+.p-muted{font-size:11px;color:var(--p-muted);line-height:1.45}
+.p-search{height:41px;border:1px solid var(--line);background:#f7f8fa;border-radius:9px;display:flex;align-items:center;gap:8px;padding:0 11px;margin:15px 0 14px;font-size:11px;color:var(--p-muted)}
+.p-chips{display:flex;gap:7px;overflow:hidden;margin-bottom:14px}
+.p-chip{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:18px;padding:7px 10px;font-size:9px;font-weight:600}
+.p-chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.p-section{margin:19px 0 10px;display:flex;justify-content:space-between;align-items:center}
+.p-section span{color:var(--primary);font-size:10px;font-weight:700}
+.p-cats{display:flex;gap:8px;overflow:hidden}
+.p-cat{min-width:66px;text-align:center}
+.p-catbox{height:55px;border-radius:9px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-size:8px;color:#5f6878}
+.p-cat b{display:block;font-size:8px;margin-top:5px}
+.p-products{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.p-product{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.p-img{height:125px;background:#eef0f2;display:grid;place-items:center;position:relative}
+.p-img svg{width:105px;height:105px}
+.p-fast{position:absolute;top:7px;left:7px;background:#fff;color:var(--green);font-size:8px;font-weight:800;border-radius:4px;padding:4px 5px}
+.p-prodbody{padding:10px}
+.p-prodtitle{font-size:10px;font-weight:700;line-height:1.35;height:28px}
+.p-supplier{font-size:8px;color:var(--p-muted);margin:4px 0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-price{font-family:Sora,sans-serif;font-size:14px;font-weight:700}
+.p-unit{font-size:8px;color:var(--p-muted)}
+.p-buy{display:block;width:100%;background:var(--primary);color:#fff;border-radius:6px;padding:8px;margin-top:8px;font-size:9px;font-weight:800;text-align:center}
+.p-nav{height:66px;background:#fff;border-top:1px solid var(--line);position:absolute;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(3,1fr);z-index:10}
+.p-nav div{color:#9299a5;font-size:9px;font-weight:700;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center}
+.p-nav div.on{color:var(--primary)}
+.p-nav svg{width:19px;height:19px}
+/* fornecedor */
+.p-switch{display:flex;background:#eef0f3;border-radius:8px;padding:3px;margin-bottom:15px}
+.p-switch div{flex:1;padding:7px;border-radius:6px;font-size:9px;font-weight:700;color:var(--p-muted);text-align:center}
+.p-switch div.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.p-seller-title{display:flex;justify-content:space-between;align-items:center}
+.p-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.p-metric{background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px}
+.p-metric small{font-size:8px;color:var(--p-muted)}
+.p-metric strong{display:block;font-family:Sora,sans-serif;font-size:17px;margin-top:4px}
+.p-order{background:#fff;border:1px solid var(--line);border-radius:9px;padding:12px;margin-bottom:8px}
+.p-order-top{display:flex;justify-content:space-between}
+.p-order strong{font-size:10px}
+.p-order small{display:block;color:var(--p-muted);font-size:8px;margin-top:3px}
+.p-status-tag{font-size:7px;font-weight:800;padding:5px 6px;border-radius:4px;height:fit-content}
+.p-new{background:var(--yellowbg);color:var(--yellow)}
+.p-progress{background:var(--bluebg);color:var(--blue)}
+.p-order-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:11px}
+.p-order-bottom b{font-size:11px}
+.p-smallbtn{border:1px solid var(--line);background:#fff;border-radius:5px;padding:6px 8px;font-size:8px;font-weight:800}
+.p-sprod{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px;margin-bottom:7px}
+.p-mini{width:44px;height:44px;background:#eef0f2;border-radius:7px;display:grid;place-items:center;flex:none}
+.p-mini svg{width:38px;height:38px}
+.p-sprod strong{font-size:9px}
+.p-sprod small{display:block;color:var(--p-muted);font-size:7px;margin-top:3px}
+.p-stock{margin-left:auto;text-align:right;font-size:8px;color:var(--green);font-weight:800}
+
+/* ---------- Como funciona ---------- */
+.how{padding:88px 0;background:var(--surface);border-block:1px solid var(--line)}
+.how h2,.sides h2,.faq h2{font-size:clamp(1.65rem,3.2vw,2.35rem);font-weight:700;letter-spacing:-.03em}
+.steps{list-style:none;margin:48px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.steps__item{position:relative;padding-top:0}
+.steps__num{width:40px;height:40px;border-radius:50%;background:var(--primary);color:var(--ink);font-family:Sora,sans-serif;font-weight:700;display:grid;place-items:center;position:relative;z-index:1}
+.steps__item:not(:last-child)::after{content:"";position:absolute;top:19px;left:52px;right:-28px;height:2px;background:var(--line-strong)}
+.steps__item h3{margin-top:18px;font-size:1.2rem;letter-spacing:-.02em}
+.steps__item p{margin-top:8px;color:var(--text);max-width:24em}
+
+/* ---------- Dois lados ---------- */
+.sides{padding:96px 0}
+.sides__grid{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:stretch}
+.side{border-radius:18px;padding:36px;display:flex;flex-direction:column}
+.side h3{font-size:clamp(1.4rem,2.4vw,1.8rem);letter-spacing:-.025em;max-width:16em}
+.side ul{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.side li{position:relative;padding-left:26px;line-height:1.5}
+.side li::before{content:"";position:absolute;left:2px;top:.55em;width:10px;height:10px;border-radius:50%}
+.side__proof{margin-top:24px;padding-top:18px;font-size:.92rem;line-height:1.5}
+.side .btn{margin-top:auto;align-self:flex-start}
+.side__body{flex:1}
+.side--lojista{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--primary)}
+.side--lojista li::before{background:var(--primary)}
+.side--lojista li{color:var(--text)}
+.side--lojista .side__proof{border-top:1px solid var(--line);color:var(--muted)}
+.side--lojista .side__proof strong{color:var(--ink)}
+.side--fornecedor{background:var(--ink);color:#fff}
+.side--fornecedor h3{color:#fff}
+.side--fornecedor li{color:#dbe0ea}
+.side--fornecedor li::before{background:var(--secondary)}
+.side--fornecedor .side__proof{border-top:1px solid rgba(255,255,255,.18);color:#b9c1d0}
+.side .btn{margin-top:28px}
+
+/* ---------- FAQ ---------- */
+.faq{padding:24px 0 104px}
+.faq__wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;align-items:start}
+.faq__list{border-top:1px solid var(--line-strong)}
+.faq details{border-bottom:1px solid var(--line-strong)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-weight:600;position:relative;border-radius:6px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:6px;top:50%;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-70%) rotate(45deg);transition:transform .15s ease}
+.faq details[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+.faq details p{padding:0 40px 22px 0;color:var(--text);max-width:36em}
+
+/* ---------- Rodapé ---------- */
+.foot{border-top:1px solid var(--line-strong);padding:32px 0 44px}
+.foot .wrap{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:center;justify-content:space-between}
+.foot p{color:var(--muted);font-size:.9rem}
+.foot nav{display:flex;gap:22px;font-size:.92rem;font-weight:600}
+.foot nav a{color:var(--ink)}
+
+/* ---------- Responsivo ---------- */
+@media (max-width:1020px){
+  .hero__grid{grid-template-columns:1fr;gap:56px}
+  .demo{align-items:center}
+  .faq__wrap{grid-template-columns:1fr;gap:28px}
+}
+@media (max-width:820px){
+  .steps{grid-template-columns:1fr;gap:0}
+  .steps__item{padding:0 0 32px 60px}
+  .steps__item:last-child{padding-bottom:0}
+  .steps__num{position:absolute;left:0;top:0}
+  .steps__item h3{margin-top:0;padding-top:7px}
+  .steps__item:not(:last-child)::after{top:40px;bottom:0;left:19px;right:auto;width:2px;height:auto}
+  .sides__grid{grid-template-columns:1fr}
+  .side{padding:28px}
+  .how{padding:64px 0}
+  .sides{padding:64px 0}
+}
+@media (max-width:520px){
+  .wrap{width:min(var(--maxw),100% - 32px)}
+  .hero{padding-bottom:64px}
+  .card{padding:20px}
+  .choices{grid-template-columns:1fr}
+  .phone-scale{--s:.8}
+  .tabs button{padding:10px 14px}
+}
+@media (max-width:360px){ .phone-scale{--s:.72} }
+</style>
+</head>
+
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#topo" aria-label="Puppy, início">puppy<span>.</span></a>
+    <a class="btn btn--ghost" href="#lista">Entrar na lista</a>
+  </div>
+</header>
+
+<main id="topo">
+
+  <!-- ===== HERO + FORMULÁRIO ===== -->
+  <section class="hero" aria-labelledby="titulo">
+    <div class="wrap hero__grid">
+
+      <div>
+        <h1 class="hero__title" id="titulo">Entrega no horário certo, sem você largar o balcão.</h1>
+        <p class="hero__lead">O Puppy reúne vários fornecedores num só app, compara preço e prazo e organiza as entregas por urgência. Entre na lista de espera e seja chamado quando abrirmos.</p>
+
+        <form id="lista" class="card form" novalidate aria-labelledby="form-titulo">
+          <div class="form__head">
+            <h2 id="form-titulo">Entrar na lista de espera</h2>
+            <p>É grátis e leva menos de um minuto.</p>
+          </div>
+
+          <fieldset class="field" data-field="perfil">
+            <legend>Eu sou</legend>
+            <div class="choices">
+              <label class="choice">
+                <input type="radio" name="perfil" value="lojista" aria-describedby="erro-perfil">
+                <span class="choice__box"><strong>Lojista</strong><small>Compro de fornecedores</small></span>
+              </label>
+              <label class="choice">
+                <input type="radio" name="perfil" value="fornecedor" aria-describedby="erro-perfil">
+                <span class="choice__box"><strong>Fornecedor</strong><small>Vendo para lojistas</small></span>
+              </label>
+            </div>
+            <p class="error" id="erro-perfil"></p>
+          </fieldset>
+
+          <div class="field" data-field="nome">
+            <label for="nome">Nome</label>
+            <input class="input" id="nome" name="nome" type="text" autocomplete="name" maxlength="120" aria-describedby="erro-nome">
+            <p class="error" id="erro-nome"></p>
+          </div>
+
+          <div class="field" data-field="email">
+            <label for="email">E-mail</label>
+            <input class="input" id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" placeholder="nome@empresa.com" aria-describedby="erro-email">
+            <p class="error" id="erro-email"></p>
+          </div>
+
+          <div class="field" data-field="whatsapp">
+            <label for="whatsapp">WhatsApp</label>
+            <input class="input" id="whatsapp" name="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 91234-5678" aria-describedby="erro-whatsapp">
+            <p class="error" id="erro-whatsapp"></p>
+          </div>
+
+          <details class="more">
+            <summary>Contar mais sobre o meu negócio <span class="opt">(opcional)</span></summary>
+            <div class="more__grid">
+              <div class="field">
+                <label for="empresa">Nome da empresa ou loja <span class="opt">(opcional)</span></label>
+                <input class="input" id="empresa" name="empresa" type="text" autocomplete="organization" maxlength="120">
+              </div>
+              <div class="field">
+                <label for="segmento">Segmento <span class="opt">(opcional)</span></label>
+                <input class="input" id="segmento" name="segmento" type="text" list="segmentos" maxlength="80" placeholder="Escolha ou escreva o seu">
+                <datalist id="segmentos">
+                  <option value="Eletrônicos e informática">
+                  <option value="Celulares e acessórios">
+                  <option value="Vestuário">
+                  <option value="Autopeças">
+                  <option value="Material de construção">
+                  <option value="Papelaria e escritório">
+                  <option value="Farmácia">
+                  <option value="Alimentos e bebidas">
+                  <option value="Casa e decoração">
+                </datalist>
+              </div>
+              <div class="field">
+                <label for="cidade">Cidade <span class="opt">(opcional)</span></label>
+                <input class="input" id="cidade" name="cidade" type="text" autocomplete="address-level2" maxlength="80">
+              </div>
+            </div>
+          </details>
+
+          <div class="consent" data-field="consentimento">
+            <input type="checkbox" id="consentimento" name="consentimento" aria-describedby="erro-consentimento">
+            <label for="consentimento">Concordo em receber contato do Puppy por e-mail e WhatsApp sobre o lançamento e em ter meus dados tratados para esse fim. <a href="#faq-dados">Como usamos seus dados</a></label>
+          </div>
+          <p class="error" id="erro-consentimento"></p>
+
+          <!-- campo-isca contra robôs: pessoas não veem nem preenchem -->
+          <div class="hp" aria-hidden="true">
+            <label for="site">Não preencha este campo</label>
+            <input id="site" name="site" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button class="btn btn--primary btn--block" type="submit" id="enviar">Entrar na lista de espera</button>
+          <p class="form__status" id="status" role="alert" aria-live="assertive"></p>
+          <p class="form__fine">Sem custo e sem cartão. Você pode sair da lista quando quiser.</p>
+        </form>
+
+        <div class="card success" id="sucesso" role="status" tabindex="-1" hidden>
+          <div class="success__mark" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+          </div>
+          <h2>Você está na lista.</h2>
+          <p>Vamos falar com você por e-mail ou WhatsApp quando o Puppy abrir. Enquanto isso, conte a quem também compra ou vende no atacado.</p>
+          <button class="btn btn--ghost" type="button" id="novo-cadastro">Cadastrar outro contato</button>
+        </div>
+
+        <noscript><p class="form__status" style="display:block;margin-top:20px">Ative o JavaScript do navegador para entrar na lista de espera.</p></noscript>
+      </div>
+
+      <!-- celular com a tela real do protótipo -->
+      <div class="demo">
+        <div class="tabs" role="group" aria-label="Escolha qual lado do app ver">
+          <button type="button" data-view-tab="lojista" aria-pressed="true">Visão do lojista</button>
+          <button type="button" data-view-tab="fornecedor" aria-pressed="false">Visão do fornecedor</button>
+        </div>
+
+        <div class="phone-scale">
+          <div class="phone" role="img" id="phone" aria-label="Tela de exemplo do app Puppy: catálogo com ofertas de vários fornecedores.">
+            <div class="p-screen" inert>
+              <div class="p-status"><span>14:32</span><span>● ● ▰</span></div>
+              <div class="p-bar"><div class="p-logo">puppy<span>.</span></div><div class="p-avatar">U</div></div>
+
+              <!-- Visão do lojista -->
+              <div id="view-lojista">
+                <div class="p-content has-nav p-view">
+                  <div class="p-eyebrow">Marketplace B2B</div>
+                  <div class="p-title">Compre para sua loja.</div>
+                  <p class="p-muted">Compare fornecedores, preços e prazos em um só lugar.</p>
+                  <div class="p-search">⌕ Buscar produtos ou marcas...</div>
+                  <div class="p-chips"><span class="p-chip on">Todos</span><span class="p-chip">Mais vendidos</span><span class="p-chip">Entrega rápida</span></div>
+                  <div class="p-section"><div class="p-h2">Categorias</div><span>Ver todas</span></div>
+                  <div class="p-cats">
+                    <div class="p-cat"><div class="p-catbox">Cabos</div><b>Cabos</b></div>
+                    <div class="p-cat"><div class="p-catbox">Energia</div><b>Energia</b></div>
+                    <div class="p-cat"><div class="p-catbox">Áudio</div><b>Áudio</b></div>
+                    <div class="p-cat"><div class="p-catbox">Celular</div><b>Celular</b></div>
+                  </div>
+                  <div class="p-section"><div class="p-h2">Ofertas para sua loja</div><span>Ver todos</span></div>
+                  <div class="p-products">
+                    <div class="p-product"><div class="p-img"><span class="p-fast">ENTREGA RÁPIDA</span><span data-icon="cable"></span></div><div class="p-prodbody"><div class="p-prodtitle">Cabo USB-C 1m</div><div class="p-supplier">Tech Distribuidora</div><span class="p-price">R$ 8,90</span><span class="p-unit"> / un.</span><div class="p-buy">Ver oferta</div></div></div>
+                    <div class="p-product"><div class="p-img"><span class="p-fast">ENTREGA RÁPIDA</span><span data-icon="charger"></span></div><div class="p-prodbody"><div class="p-prodtitle">Carregador Turbo 20W</div><div class="p-supplier">Centro Tech Atacado</div><span class="p-price">R$ 24,90</span><span class="p-unit"> / un.</span><div class="p-buy">Ver oferta</div></div></div>
+                  </div>
+                </div>
+                <div class="p-nav">
+                  <div class="on"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Início</div>
+                  <div><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M6 3h12v18H6zM9 7h6M9 11h6M9 15h4"/></svg>Pedidos</div>
+                  <div><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 4h2l2 12h11l2-8H7M9 20h.01M17 20h.01"/></svg>Carrinho</div>
+                </div>
+              </div>
+
+              <!-- Visão do fornecedor -->
+              <div id="view-fornecedor" hidden>
+                <div class="p-content p-view">
+                  <div class="p-switch"><div class="on">Vendas</div><div>Produtos</div></div>
+                  <div class="p-seller-title">
+                    <div><div class="p-eyebrow">Fornecedor</div><div class="p-title">Central de vendas</div></div>
+                    <div class="p-avatar">+</div>
+                  </div>
+                  <div class="p-metrics">
+                    <div class="p-metric"><small>Pedidos novos</small><strong>12</strong></div>
+                    <div class="p-metric"><small>Vendas hoje</small><strong>R$ 8,4k</strong></div>
+                    <div class="p-metric"><small>Produtos ativos</small><strong>184</strong></div>
+                    <div class="p-metric"><small>Em entrega</small><strong>7</strong></div>
+                  </div>
+                  <div class="p-section"><div class="p-h2">Pedidos recentes</div><span>Ver todos</span></div>
+                  <div class="p-order"><div class="p-order-top"><div><strong>#PP-10482</strong><small>Eletrônica São Jorge · 2 itens</small></div><span class="p-status-tag p-new">NOVO</span></div><div class="p-order-bottom"><b>R$ 318,80</b><span class="p-smallbtn">Ver pedido</span></div></div>
+                  <div class="p-order"><div class="p-order-top"><div><strong>#PP-10479</strong><small>Cell Center Norte · 6 itens</small></div><span class="p-status-tag p-progress">SEPARANDO</span></div><div class="p-order-bottom"><b>R$ 740,00</b><span class="p-smallbtn">Ver pedido</span></div></div>
+                  <div class="p-section"><div class="p-h2">Produtos em destaque</div><span>Gerenciar</span></div>
+                  <div class="p-sprod"><div class="p-mini"><span data-icon="cable"></span></div><div><strong>Cabo USB-C 1m</strong><small>R$ 8,90 · 320 em estoque</small></div><div class="p-stock">ATIVO</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="demo__note">Tela de exemplo, com dados fictícios.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <section class="how" id="como-funciona" aria-labelledby="como-titulo">
+    <div class="wrap">
+      <h2 id="como-titulo">Do pedido à entrega, em três passos</h2>
+      <ol class="steps">
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">1</span>
+          <h3>Compare preço e prazo</h3>
+          <p>Veja as ofertas de vários fornecedores lado a lado, com preço, estoque e prazo de entrega.</p>
+        </li>
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">2</span>
+          <h3>Diga o quanto é urgente</h3>
+          <p>Marque o pedido como padrão ou urgente. O fornecedor recebe o aviso já com essa informação.</p>
+        </li>
+        <li class="steps__item">
+          <span class="steps__num" aria-hidden="true">3</span>
+          <h3>Receba sem sair do balcão</h3>
+          <p>As entregas de vários pedidos são organizadas juntas, pela urgência e pela distância. Você acompanha tudo pelo app.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== DOIS LADOS ===== -->
+  <section class="sides" aria-labelledby="lados-titulo">
+    <div class="wrap">
+      <h2 id="lados-titulo">Um app para quem compra e para quem vende</h2>
+      <div class="sides__grid">
+
+        <article class="side side--lojista">
+          <div class="side__body">
+            <h3>Menos tempo cotando, menos tempo fora do balcão.</h3>
+            <ul>
+              <li>Preço, estoque e prazo de vários fornecedores numa tela só.</li>
+              <li>Você escolhe se o pedido é padrão ou urgente.</li>
+              <li>Status do pedido no app, sem precisar ligar para ninguém.</li>
+            </ul>
+            <p class="side__proof"><strong>Ouvimos 8 lojistas: 7 já precisaram sair do balcão para resolver uma entrega, e 6 pagariam a mais por uma entrega rápida e previsível.</strong> Pesquisa da nossa equipe, entre agosto e setembro de 2026.</p>
+          </div>
+          <button class="btn btn--primary" type="button" data-pick="lojista">Entrar como lojista</button>
+        </article>
+
+        <article class="side side--fornecedor">
+          <div class="side__body">
+            <h3>Pedidos que já chegam com a urgência marcada.</h3>
+            <ul>
+              <li>Demanda de vários lojistas num único canal de vendas.</li>
+              <li>Entregas organizadas por urgência e distância, sem você montar uma roteirização própria.</li>
+              <li>Cadastro gratuito e catálogo direto no app.</li>
+            </ul>
+            <p class="side__proof">Hoje a maioria dos fornecedores recebe pedido por WhatsApp, telefone e visita, sem saber o que é mais urgente.</p>
+          </div>
+          <button class="btn btn--orange" type="button" data-pick="fornecedor">Entrar como fornecedor</button>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="faq" id="faq" aria-labelledby="faq-titulo">
+    <div class="wrap faq__wrap">
+      <h2 id="faq-titulo">Perguntas frequentes</h2>
+      <div class="faq__list">
+        <details>
+          <summary>O Puppy já está no ar?</summary>
+          <p>Ainda não. Estamos construindo a primeira versão. Quem entra na lista de espera é avisado quando abrirmos e pode testar primeiro.</p>
+        </details>
+        <details>
+          <summary>Quanto custa?</summary>
+          <p>Entrar na lista é grátis. Os valores de entrega e as condições para vender ainda estão sendo definidos, e quem estiver na lista fica sabendo antes do lançamento.</p>
+        </details>
+        <details>
+          <summary>O Puppy é só para tecnologia?</summary>
+          <p>Começamos por eletrônicos, informática e acessórios, mas você pode entrar com qualquer segmento. O segmento que você informar ajuda a decidir o que vem depois.</p>
+        </details>
+        <details>
+          <summary>Vocês atendem a minha cidade?</summary>
+          <p>Aceitamos cadastros de qualquer região. A cidade que você informar nos ajuda a decidir onde começar.</p>
+        </details>
+        <details id="faq-dados">
+          <summary>O que vocês fazem com os meus dados?</summary>
+          <p>Usamos nome, e-mail e WhatsApp só para falar com você sobre o Puppy. Não vendemos nem repassamos seus dados, e eles ficam num banco de dados com acesso restrito à equipe. <span id="como-excluir">Para pedir a exclusão, responda a qualquer mensagem nossa.</span></p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>© 2026 Puppy. Marketplace B2B.</p>
+    <nav aria-label="Rodapé">
+      <a href="#lista">Entrar na lista</a>
+      <a href="#faq">Perguntas frequentes</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO: preencha estas 3 linhas depois de criar o projeto no Supabase.
+   - SUPABASE_URL: Project Settings > API > Project URL
+   - SUPABASE_KEY: a chave PÚBLICA (publishable "sb_publishable_..." ou "anon").
+     NUNCA coloque aqui a chave "service_role" ou "secret".
+   - CONTACT_EMAIL: e-mail para pedidos de exclusão de dados (pode ficar vazio).
+   ===================================================================== */
+const CONFIG = {
+  SUPABASE_URL: "https://zfmlgefoxzmguacihavu.supabase.co",
+  SUPABASE_KEY: "sb_publishable_SNy4AJpG9f3iOLlEUBQUvg_wnCnpTRh",
+  CONTACT_EMAIL: "mateus.tibao@gmail.com"
+};
+const TABELA = "lista_espera";
+
+/* ---------- Ícones dos produtos (do protótipo) ---------- */
+function svg(type){
+  const c='fill="none" stroke="#273142" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  if(type==='cable') return `<svg viewBox="0 0 160 160"><path ${c} d="M48 50v35c0 18 12 28 32 28h15c20 0 29-10 29-28V63"/><rect ${c} x="39" y="31" width="18" height="25" rx="3"/><rect ${c} x="116" y="45" width="18" height="25" rx="3"/><path ${c} d="M42 43h12M119 57h12"/></svg>`;
+  return `<svg viewBox="0 0 160 160"><rect ${c} x="45" y="27" width="70" height="92" rx="12"/><path ${c} d="M63 27v-9M97 27v-9M75 119v14M85 119v14"/><path ${c} d="M81 51 68 75h18l-8 20 15-27H75z"/></svg>`;
+}
+document.querySelectorAll('[data-icon]').forEach(el=>{ el.outerHTML = svg(el.dataset.icon); });
+
+/* ---------- Troca de visão no celular ---------- */
+const phone = document.getElementById('phone');
+const views = {lojista: document.getElementById('view-lojista'), fornecedor: document.getElementById('view-fornecedor')};
+const labels = {
+  lojista: 'Tela de exemplo do app Puppy: catálogo com ofertas de vários fornecedores.',
+  fornecedor: 'Tela de exemplo do app Puppy: central de vendas do fornecedor, com pedidos novos e produtos ativos.'
+};
+document.querySelectorAll('[data-view-tab]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const v = btn.dataset.viewTab;
+    Object.entries(views).forEach(([k,el])=>{
+      const on = k===v; el.hidden = !on;
+      if(on){ const c = el.querySelector('.p-view'); c.style.animation='none'; void c.offsetWidth; c.style.animation=''; }
+    });
+    document.querySelectorAll('[data-view-tab]').forEach(b=>b.setAttribute('aria-pressed', String(b===btn)));
+    phone.setAttribute('aria-label', labels[v]);
+  });
+});
+
+/* ---------- Texto de exclusão de dados ---------- */
+if(CONFIG.CONTACT_EMAIL){
+  const alvo = document.getElementById('como-excluir');
+  alvo.textContent = '';
+  alvo.append('Para pedir a exclusão, escreva para ');
+  const a = document.createElement('a'); a.href = 'mailto:' + CONFIG.CONTACT_EMAIL; a.textContent = CONFIG.CONTACT_EMAIL;
+  alvo.append(a, '.');
+}
+
+/* ---------- Formulário ---------- */
+const form = document.getElementById('lista');
+const sucesso = document.getElementById('sucesso');
+const statusEl = document.getElementById('status');
+const botao = document.getElementById('enviar');
+const reduzMovimento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const MSG = {
+  perfil: 'Escolha se você é lojista ou fornecedor.',
+  nome: 'Informe seu nome.',
+  email: 'Informe um e-mail válido, como nome@empresa.com.',
+  whatsapp: 'Informe seu WhatsApp com DDD, como (11) 91234-5678.',
+  consentimento: 'Marque a caixa para entrar na lista.'
+};
+
+function formatarTelefone(valor){
+  let d = valor.replace(/\D/g,'');
+  if(d.length > 11 && d.startsWith('55')) d = d.slice(2);   // aceita colar "+55 11 ..."
+  d = d.slice(0,11);
+  if(d.length <= 2) return d ? `(${d}` : '';
+  if(d.length <= 6) return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  if(d.length <= 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+}
+document.getElementById('whatsapp').addEventListener('input', e=>{ e.target.value = formatarTelefone(e.target.value); });
+
+/* devolve só dígitos com DDI 55, ou null se inválido */
+function normalizarTelefone(valor){
+  let d = valor.replace(/\D/g,'');
+  if(d.length >= 12 && d.startsWith('55')) d = d.slice(2);
+  if(d.length === 10) return '55' + d;
+  if(d.length === 11 && d[2] === '9') return '55' + d;
+  return null;
+}
+
+function marcarErro(chave, mensagem){
+  const erro = document.getElementById('erro-' + chave);
+  const alvo = form.querySelector(`[data-field="${chave}"]`);
+  if(erro) erro.textContent = mensagem || '';
+  if(alvo) alvo.classList.toggle('is-invalid', !!mensagem);
+  const campo = chave==='perfil' ? form.querySelector('input[name="perfil"]') : form.elements[chave];
+  if(campo && chave!=='perfil') campo.setAttribute('aria-invalid', mensagem ? 'true' : 'false');
+}
+
+function validar(){
+  const dados = {
+    perfil: (form.querySelector('input[name="perfil"]:checked') || {}).value || '',
+    nome: form.elements.nome.value.trim(),
+    email: form.elements.email.value.trim().toLowerCase(),
+    whatsapp: normalizarTelefone(form.elements.whatsapp.value),
+    consentimento: form.elements.consentimento.checked
+  };
+  const falhas = [];
+  if(!dados.perfil) falhas.push('perfil');
+  if(dados.nome.length < 2) falhas.push('nome');
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(dados.email)) falhas.push('email');
+  if(!dados.whatsapp) falhas.push('whatsapp');
+  if(!dados.consentimento) falhas.push('consentimento');
+  ['perfil','nome','email','whatsapp','consentimento'].forEach(k=>marcarErro(k, falhas.includes(k) ? MSG[k] : ''));
+  return {dados, falhas};
+}
+
+/* limpa o erro de um campo assim que a pessoa mexe nele */
+['nome','email','whatsapp'].forEach(k=>form.elements[k].addEventListener('input',()=>marcarErro(k,'')));
+form.querySelectorAll('input[name="perfil"]').forEach(r=>r.addEventListener('change',()=>marcarErro('perfil','')));
+form.elements.consentimento.addEventListener('change',()=>marcarErro('consentimento',''));
+
+function vazioParaNulo(v){ v = (v||'').trim(); return v ? v : null; }
+
+function origemDoAcesso(){
+  const p = new URLSearchParams(location.search);
+  return (p.get('utm_source') || 'direto').slice(0,60);
+}
+
+function configurado(){
+  return !/SEU-PROJETO|SUA-CHAVE/.test(CONFIG.SUPABASE_URL + CONFIG.SUPABASE_KEY);
+}
+
+async function enviarParaOBanco(payload){
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), 15000);
+  try{
+    const res = await fetch(`${CONFIG.SUPABASE_URL}/rest/v1/${TABELA}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': CONFIG.SUPABASE_KEY,      // só o apikey: a chave publishable não vai em Authorization
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify(payload),
+      signal: ctrl.signal
+    });
+    if(res.ok) return 'ok';
+    if(res.status === 409) return 'duplicado';
+    const detalhe = await res.text().catch(()=> '');
+    throw new Error(`HTTP ${res.status} ${detalhe}`);
+  } finally { clearTimeout(timer); }
+}
+
+function mostrarSucesso(){
+  form.hidden = true;
+  sucesso.hidden = false;
+  sucesso.focus({preventScroll:true});
+  sucesso.scrollIntoView({behavior: reduzMovimento ? 'auto' : 'smooth', block:'center'});
+}
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  statusEl.textContent = '';
+  const {dados, falhas} = validar();
+  if(falhas.length){
+    const primeiro = falhas[0];
+    const foco = primeiro==='perfil' ? form.querySelector('input[name="perfil"]') : form.elements[primeiro];
+    if(foco) foco.focus();
+    return;
+  }
+
+  // robôs preenchem o campo escondido: finge que deu certo e não grava nada
+  if(form.elements.site.value){ mostrarSucesso(); return; }
+
+  if(!configurado()){
+    statusEl.textContent = 'O cadastro ainda não está ligado ao banco de dados. Preencha SUPABASE_URL e SUPABASE_KEY no começo do arquivo index.html.';
+    console.error('Configure CONFIG.SUPABASE_URL e CONFIG.SUPABASE_KEY.');
+    return;
+  }
+
+  const payload = {
+    perfil: dados.perfil,
+    nome: dados.nome,
+    email: dados.email,
+    whatsapp: dados.whatsapp,
+    empresa: vazioParaNulo(form.elements.empresa.value),
+    segmento: vazioParaNulo(form.elements.segmento.value),
+    cidade: vazioParaNulo(form.elements.cidade.value),
+    origem: origemDoAcesso(),
+    consentimento: true
+  };
+
+  botao.disabled = true;
+  const textoOriginal = botao.textContent;
+  botao.textContent = 'Enviando...';
+  try{
+    // e-mail repetido também mostra o sucesso: assim ninguém descobre quem está na lista testando e-mails
+    await enviarParaOBanco(payload);
+    form.reset();
+    mostrarSucesso();
+  }catch(err){
+    console.error('Falha ao salvar o cadastro:', err);
+    statusEl.textContent = 'Não conseguimos salvar seu cadastro agora. Confira sua conexão e tente de novo.';
+  }finally{
+    botao.disabled = false;
+    botao.textContent = textoOriginal;
+  }
+});
+
+document.getElementById('novo-cadastro').addEventListener('click',()=>{
+  sucesso.hidden = true;
+  form.hidden = false;
+  statusEl.textContent = '';
+  form.scrollIntoView({behavior: reduzMovimento ? 'auto' : 'smooth', block:'center'});
+  form.elements.nome.focus({preventScroll:true});
+});
+
+/* botões "Entrar como lojista/fornecedor" escolhem o perfil e levam ao formulário */
+document.querySelectorAll('[data-pick]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(form.hidden){ sucesso.hidden = true; form.hidden = false; }
+    const radio = form.querySelector(`input[name="perfil"][value="${btn.dataset.pick}"]`);
+    radio.checked = true; marcarErro('perfil','');
+    form.scrollIntoView({behavior: reduzMovimento ? 'auto' : 'smooth', block:'center'});
+    setTimeout(()=>form.elements.nome.focus({preventScroll:true}), reduzMovimento ? 0 : 450);
+  });
+});
+</script>
+</body>
+</html>
